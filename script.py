@@ -24,22 +24,45 @@ for arq in soOut:
     for linha in reader:
         count2 += 1
         print ( count2)
-
+        
+username = 'sa' 
+password = 'erica@123'
 connection = pyodbc.connect('Driver={ODBC Driver 17 for SQL Server};'
-                      'Server=DESKTOP-PO3SOQV;'
+                      'Server=localhost, 1433;'
                       'Database=Desafio;'
-                      'Trusted_Connection=yes;')
+                      'UID='+username+';'
+                      'PWD='+ password+';'
+                    #   'Trusted_Connection=yes;'
+                      )
 cursor = connection.cursor()
-
-cursor.execute('''
+query = '''
 		CREATE TABLE clientes (
 			id int primary key,
 			nome nvarchar(50),
 			email nvarchar(100),
             data_cadastro datetime,
-            telefone nvarchar(50),
+            telefone nvarchar(50)
 			)
-               ''')
+               '''
+cursor.execute(query)
+query2 = '''
+        CREATE TABLE transactionin (
+			id int primary key,
+            cliente_id int FOREIGN KEY REFERENCES clientes(id),
+			valor money,
+            data datetime
+			)    
+                '''
+cursor.execute(query2)
+query3 = '''
+        CREATE TABLE transactionout (
+			id int primary key,
+            cliente_id int FOREIGN KEY REFERENCES clientes(id),
+			valor money,
+            data datetime
+			)
+                '''
+cursor.execute(query3)
 
 # Inserindo as linhas dos arquivos do cliente na Tabela
 for arq in soCliente: 
