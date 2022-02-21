@@ -14,7 +14,7 @@ for arq in soIn:
     reader = csv.reader(ficheiro)
     for linha in reader:
         count += 1
-        print (count)
+        #print (count)
 
 count2 = 0        
 for arq in soOut:
@@ -41,7 +41,6 @@ cursor.execute('''
 			)
                ''')
 
-# Inserindo as linhas dos arquivos do cliente na Tabela
 for arq in soCliente: 
     # print(arq)
     ficheiro = open(arq, 'r', encoding="utf8")
@@ -49,16 +48,78 @@ for arq in soCliente:
     for linha in reader:
         if 'id;nome' in linha[0]: continue
         quebralinha=linha[0].split(';')
-        date_time_obj = datetime.datetime.strptime( quebralinha[3], '%Y-%m-%d %H:%M:%S %z')
+        date_time_obj = datetime.datetime.strptime(quebralinha[3], '%Y-%m-%d %H:%M:%S %z')
+        
         cursor.execute('''
-                    INSERT INTO clientes (id, nome, email, data_cadastro, telefone)
-                    VALUES (?,?,?,?,?)
+                INSERT INTO clientes (id, nome, email, data_cadastro, telefone)
+                VALUES (?,?,?,?,?)
+                    ''',
+                    quebralinha[0], 
+                    quebralinha[1], 
+                    quebralinha[2], 
+                    date_time_obj, 
+                    quebralinha[4],
+                            )
+connection.commit()
+
+        
+cursor.execute('''
+		CREATE TABLE transactionin (
+			id int primary key,
+            cliente_id int FOREIGN KEY REFERENCES clientes(id), 			
+			valor money,
+            data datetime,            
+			)
+               ''')
+
+# Inserindo as linhas dos arquivos transaction in 
+for arq in soIn: 
+    # print(arq)
+    ficheiro = open(arq, 'r', encoding="utf8")
+    reader = csv.reader(ficheiro)
+    for linha in reader:
+        if 'id;cliente_id' in linha[0]: continue
+        quebralinha=linha[0].split(';')
+        date_time_obj = datetime.datetime.strptime(quebralinha[3], '%Y-%m-%d %H:%M:%S %z')
+        try:
+            cursor.execute('''
+                    INSERT INTO transactionin (id, cliente_id, valor, data)
+                    VALUES (?,?,?,?)
                     ''',
                    quebralinha[0], 
                    quebralinha[1], 
                    quebralinha[2], 
-                   date_time_obj, 
-                   quebralinha[4],
+                   date_time_obj,                    
+                    ) 
+        except: print("erro")       
+        
+cursor.execute('''
+CREATE TABLE transactionout (
+    id int primary key,
+    cliente_id int FOREIGN KEY REFERENCES clientes(id), 			
+    valor money,
+    data datetime,            
+    )
+        ''')        
+        # Inserindo as linhas dos arquivos transaction OUT
+for arq in soOut: 
+    # print(arq)
+    ficheiro = open(arq, 'r', encoding="utf8")
+    reader = csv.reader(ficheiro)
+    for linha in reader:
+        if 'id;cliente_id' in linha[0]: continue
+        quebralinha=linha[0].split(';')
+        date_time_obj = datetime.datetime.strptime(quebralinha[3], '%Y-%m-%d %H:%M:%S %z')
+        try:
+            cursor.execute('''
+                    INSERT INTO transactionout (id, cliente_id, valor, data)
+                    VALUES (?,?,?,?)
+                    ''',
+                   quebralinha[0], 
+                   quebralinha[1], 
+                   quebralinha[2], 
+                   date_time_obj                 
                     )
+        except: print("erro")           
 connection.commit()
 
