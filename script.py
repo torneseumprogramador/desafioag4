@@ -49,7 +49,11 @@ query2 = '''
         CREATE TABLE transactionin (
 			id int primary key,
             cliente_id int FOREIGN KEY REFERENCES clientes(id),
+<<<<<<< HEAD
 			valor money,
+=======
+			valor float,
+>>>>>>> fa25cbd0af538447eef2000a70497860562f4e0a
             data datetime
 			)    
                 '''
@@ -58,7 +62,11 @@ query3 = '''
         CREATE TABLE transactionout (
 			id int primary key,
             cliente_id int FOREIGN KEY REFERENCES clientes(id),
+<<<<<<< HEAD
 			valor money,
+=======
+			valor float,
+>>>>>>> fa25cbd0af538447eef2000a70497860562f4e0a
             data datetime
 			)
                 '''
