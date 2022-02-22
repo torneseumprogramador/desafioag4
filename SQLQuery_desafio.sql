@@ -1,6 +1,6 @@
 USE Desafio
 
--- Teste: Marca a diferença em minutos em relação transação anterior
+-- Teste: Marca a diferença em minutos em relação transação anterior para o mesmo id de cliente
 -- Deu certo, mas nao consegui aplicar o filtro WHERE minute_diff<=3
 select cliente_id,valor,data,
 datediff(MINUTE, lag(data,1) over (partition by cliente_id order by data asc), data) as 'minute_diff'
@@ -36,16 +36,11 @@ inner join clientes C ON c.id = tout.cliente_id
 select * from rastreio
 where minute_diff<2
 
---  parei aqui, tentando fazer um grouo by por cliente somando o total fraudado, mas nenhum desses 2 selects funcionou
+--  Relatório com os clientes que sofreram a fraude e o valor total fraudado e numero de ocorrências
 SELECT r.cliente_id, r.nome, r.email, r.telefone, 
-	sum(r.valor) as Valor_Total_Fraudado 
-from rastreio r
+	sum(r.valor) as Valor_Total_Fraudado, count(case when r.minute_diff<2 then 1 else 0 end) as Ocorrencias
+from rastreio r 
 where minute_diff<2
-group by r.nome 
+group by r.cliente_id, r.nome, r.email, r.telefone
 
-SELECT c.id, c.nome, c.email, c.telefone, 
-	   sum(r.valor) as Valor_Total_Fraudado  
-from clientes c
-inner join rastreio r on r.Cliente_ID = c.id
-group by c.id
-having minute_diff<2
+
