@@ -32,15 +32,15 @@ SELECT
 from transactionout tout
 inner join clientes C ON c.id = tout.cliente_id
 
--- Agora consigo identificar, foram 15 clientes fraudados
+-- Agora consigo identificar, foram 13 clientes fraudados
 select * from rastreio
-where minute_diff<=3
+where minute_diff<2
 
 --  parei aqui, tentando fazer um grouo by por cliente somando o total fraudado, mas nenhum desses 2 selects funcionou
 SELECT r.cliente_id, r.nome, r.email, r.telefone, 
 	sum(r.valor) as Valor_Total_Fraudado 
 from rastreio r
-where minute_diff<=3
+where minute_diff<2
 group by r.nome 
 
 SELECT c.id, c.nome, c.email, c.telefone, 
@@ -48,4 +48,4 @@ SELECT c.id, c.nome, c.email, c.telefone,
 from clientes c
 inner join rastreio r on r.Cliente_ID = c.id
 group by c.id
-having minute_diff<=3
+having minute_diff<2
