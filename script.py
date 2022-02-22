@@ -73,6 +73,7 @@ cursor.execute('''
                ''')
 
 # Inserindo as linhas dos arquivos transaction in 
+count = 0
 for arq in soIn: 
     # print(arq)
     ficheiro = open(arq, 'r', encoding="utf8")
@@ -91,7 +92,9 @@ for arq in soIn:
                    quebralinha[2], 
                    date_time_obj,                    
                     ) 
-        except: print(f"Trans-In: Erro ({count}) Não existe cliente com esse ID")       
+        except: 
+		count+=1
+		print(f"Trans-In: Erro ({count}) Não existe cliente com esse ID")       
         
 cursor.execute('''
 CREATE TABLE transactionout (
@@ -102,6 +105,7 @@ CREATE TABLE transactionout (
     )
         ''')        
         # Inserindo as linhas dos arquivos transaction OUT
+count = 0
 for arq in soOut: 
     # print(arq)
     ficheiro = open(arq, 'r', encoding="utf8")
@@ -120,6 +124,8 @@ for arq in soOut:
                    quebralinha[2], 
                    date_time_obj                 
                     )
-        except: print(f"Trans-Out: Erro ({count}) Não existe cliente com esse ID")                  
+        except: 
+		count+=1
+		print(f"Trans-Out: Erro ({count}) Não existe cliente com esse ID")                  
 connection.commit()
 
