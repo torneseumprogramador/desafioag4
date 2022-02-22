@@ -91,7 +91,7 @@ for arq in soIn:
                    quebralinha[2], 
                    date_time_obj,                    
                     ) 
-        except: print("erro")       
+        except: print(f"Trans-In: Erro ({count}) Não existe cliente com esse ID")       
         
 cursor.execute('''
 CREATE TABLE transactionout (
@@ -120,6 +120,6 @@ for arq in soOut:
                    quebralinha[2], 
                    date_time_obj                 
                     )
-        except: print("erro")           
+        except: print(f"Trans-Out: Erro ({count}) Não existe cliente com esse ID")                  
 connection.commit()
 
