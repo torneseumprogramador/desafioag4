@@ -7,24 +7,6 @@ soIn = glob.glob("arquivos_carga_csv/transaction-in-*.csv")
 soOut = glob.glob("arquivos_carga_csv/transaction-out-*.csv")
 soCliente = glob.glob("arquivos_carga_csv/clients-*.csv")
 
-count =0
-for arq in soIn: 
-     # print(arq)
-    ficheiro = open(arq, 'r', encoding="utf8")  
-    reader = csv.reader(ficheiro)
-    for linha in reader:
-        count += 1
-        #print (count)
-
-count2 = 0        
-for arq in soOut:
-    # print(arq)
-    ficheiro = open(arq, 'r', encoding="utf8")
-    reader = csv.reader(ficheiro)
-    for linha in reader:
-        count2 += 1
-        print ( count2)
-
 connection = pyodbc.connect('Driver={ODBC Driver 17 for SQL Server};'
                       'Server=DESKTOP-PO3SOQV;'
                       'Database=Desafio;'
@@ -93,8 +75,8 @@ for arq in soIn:
                    date_time_obj,                    
                     ) 
         except: 
-		count+=1
-		print(f"Trans-In: Erro ({count}) Não existe cliente com esse ID")       
+            count+=1
+            print(f"Trans-In: Erro ({count}) Não existe cliente com esse ID")       
         
 cursor.execute('''
 CREATE TABLE transactionout (
@@ -125,7 +107,7 @@ for arq in soOut:
                    date_time_obj                 
                     )
         except: 
-		count+=1
-		print(f"Trans-Out: Erro ({count}) Não existe cliente com esse ID")                  
+            count+=1
+            print(f"Trans-Out: Erro ({count}) Não existe cliente com esse ID")                  
 connection.commit()
 
