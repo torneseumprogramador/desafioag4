@@ -5,26 +5,8 @@ import datetime
 
 soIn = glob.glob("arquivos_carga_csv/transaction-in-*.csv")
 soOut = glob.glob("arquivos_carga_csv/transaction-out-*.csv")
-soCliente = glob.glob("arquivos_carga_csv/clients-*.csv")
-
-count =0
-for arq in soIn: 
-     # print(arq)
-    ficheiro = open(arq, 'r', encoding="utf8")  
-    reader = csv.reader(ficheiro)
-    for linha in reader:
-        count += 1
-        #print (count)
-
-count2 = 0        
-for arq in soOut:
-    # print(arq)
-    ficheiro = open(arq, 'r', encoding="utf8")
-    reader = csv.reader(ficheiro)
-    for linha in reader:
-        count2 += 1
-        print ( count2)
-
+soCliente = glob.glob("arquivos_carga_csv/clients-*.csv") 
+     
 connection = pyodbc.connect('Driver={ODBC Driver 17 for SQL Server};'
                       'Server=DESKTOP-PO3SOQV;'
                       'Database=Desafio;'
@@ -50,7 +32,7 @@ for arq in soCliente:
         quebralinha=linha[0].split(';')
         date_time_obj = datetime.datetime.strptime(quebralinha[3], '%Y-%m-%d %H:%M:%S %z')
         
-        cursor.execute('''
+        cursor.execute('''            
                 INSERT INTO clientes (id, nome, email, data_cadastro, telefone)
                 VALUES (?,?,?,?,?)
                     ''',
@@ -72,6 +54,7 @@ cursor.execute('''
 			)
                ''')
 
+
 # Inserindo as linhas dos arquivos transaction in 
 for arq in soIn: 
     # print(arq)
@@ -91,7 +74,8 @@ for arq in soIn:
                    quebralinha[2], 
                    date_time_obj,                    
                     ) 
-        except: print("erro")       
+           
+        except: print(f"Nao existe cliente de ID: {quebralinha[1]}")       
         
 cursor.execute('''
 CREATE TABLE transactionout (
@@ -101,7 +85,7 @@ CREATE TABLE transactionout (
     data datetime,            
     )
         ''')        
-        # Inserindo as linhas dos arquivos transaction OUT
+ # Inserindo as linhas dos arquivos transaction OUT
 for arq in soOut: 
     # print(arq)
     ficheiro = open(arq, 'r', encoding="utf8")
@@ -120,6 +104,7 @@ for arq in soOut:
                    quebralinha[2], 
                    date_time_obj                 
                     )
-        except: print("erro")           
+        except: print(f"Nao existe cliente de ID: {quebralinha[1]}")           
+
 connection.commit()
 
