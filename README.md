@@ -1,11 +1,9 @@
-# desafioag4
+## Desafio Final - Accenture
 
 > Status: Completo ✔️
 
-### Desafio Final - Accenture
 
-
-## Desenvolvimento:
+### Desenvolvimento:
 
 * Script de migração de dados em Python 
 * Modelos de Entidades e Relacionamentos
@@ -13,7 +11,7 @@
 * Hospedagem em nuvem para rodar os Scripts
 * Códigos versionados no github
 
-## Technologias Utilizadas:
+### Technologias Utilizadas:
 
 <table>
   <tr>
@@ -32,9 +30,10 @@
 
 ## Rodando a aplicação:
 
-1) Execute: script.py
-2) Configure a conexão do database em 'Server=_*;'
-3) Crie o data base "Desafio"  
-4) Execute: SQL_Fraudes.sql
-5) Execute: Relatorio_Fraudes.pbix
+1) Crie o data base "Desafio" 
+2) Edite: script.py 
+3) Configure a conexão do database em 'Server=_*;' 
+4) Execute: script.py 
+5) Execute: SQL_Fraudes.sql
+6) Execute: Relatorio_Fraudes.pbix
 
